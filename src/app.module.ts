@@ -6,6 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './models/user.model';
 import { UserController } from './models/user.controller';
 import { UserService } from './models/user.service';
+import { ResourceNameModule } from './resource-name/resource-name.module';
 @Module({
   imports: [ConfigModule.forRoot({
     isGlobal: true,
@@ -24,6 +25,7 @@ import { UserService } from './models/user.service';
   MongooseModule.forFeature([
     { name:User.name, schema:UserSchema },
   ]),
+  ResourceNameModule,
 
 ],
   controllers: [AppController, UserController],
