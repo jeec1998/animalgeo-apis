@@ -3,10 +3,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { User, UserSchema } from './models/user.model';
-import { UserController } from './models/user.controller';
-import { UserService } from './models/user.service';
-import { ResourceNameModule } from './resource-name/resource-name.module';
+import { User, UserSchema } from './user/models/user.model';
+import { UserController } from './user/models/user.controller';
+import { UserService } from './user/models/user.service';
+import { ResourceNameModule } from './user/user.module';
 
 @Module({
   imports: [

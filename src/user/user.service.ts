@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { CreateResourceNameDto } from './dto/create-resource-name.dto';
-import { UpdateResourceNameDto } from './dto/update-resource-name.dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
-export class ResourceNameService {
-  create(createResourceNameDto: CreateResourceNameDto) {
+export class UserService {
+  create(CreateUserDto: CreateUserDto) {
     return 'This action adds a new resourceName';
   }
 
@@ -16,7 +16,7 @@ export class ResourceNameService {
     return `This action returns a #${id} resourceName`;
   }
 
-  update(id: number, updateResourceNameDto: UpdateResourceNameDto) {
+  update(id: number, UpdateUserDto: UpdateUserDto) {
     return `This action updates a #${id} resourceName`;
   }
 
