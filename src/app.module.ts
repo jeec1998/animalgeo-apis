@@ -7,27 +7,28 @@ import { User, UserSchema } from './models/user.model';
 import { UserController } from './models/user.controller';
 import { UserService } from './models/user.service';
 import { ResourceNameModule } from './resource-name/resource-name.module';
-@Module({
-  imports: [ConfigModule.forRoot({
-    isGlobal: true,
-    envFilePath: '.env',
-  }),
-  MongooseModule.forRootAsync({
-    imports: [ConfigModule],
-    useFactory: async (configService: ConfigService) => ({
-      uri: configService.get<string>(
-        'MONGO_DB_CONNECTION',
-        'mongodb://root:root@localhost:27017/nest?authSource=admin',
-      ),
-    }),
-    inject: [ConfigService],
-  }),
-  MongooseModule.forFeature([
-    { name:User.name, schema:UserSchema },
-  ]),
-  ResourceNameModule,
 
-],
+@Module({
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get<string>(
+          'MONGO_DB_CONNECTION',
+          'mongodb://root:root@localhost:27017/nest?authSource=admin',
+        ),
+      }),
+      inject: [ConfigService],
+    }),
+    MongooseModule.forFeature([
+      { name: User.name, schema: UserSchema },
+    ]),
+    ResourceNameModule,
+  ],
   controllers: [AppController, UserController],
   providers: [AppService, UserService],
 })
