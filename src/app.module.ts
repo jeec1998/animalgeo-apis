@@ -6,7 +6,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './user/models/user.model';
 import { UserController } from './user/models/user.controller';
 import { UserService } from './user/models/user.service';
-import { ResourceNameModule } from './user/user.module';
+import { UserModule } from './user/user.module';
+import { VeterinariaModule } from './veterinaria/veterinaria.module';
 
 @Module({
   imports: [
@@ -24,10 +25,9 @@ import { ResourceNameModule } from './user/user.module';
       }),
       inject: [ConfigService],
     }),
-    MongooseModule.forFeature([
-      { name: User.name, schema: UserSchema },
-    ]),
-    ResourceNameModule,
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+    UserModule,
+    VeterinariaModule,
   ],
   controllers: [AppController, UserController],
   providers: [AppService, UserService],
