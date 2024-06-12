@@ -1,10 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { type HydratedDocument } from 'mongoose';
+import { ObjectId, Types, type HydratedDocument } from 'mongoose';
 
 export type VeterinariaDocument = HydratedDocument<Veterinaria>;
 
 @Schema({ timestamps: true })
 export class Veterinaria {
+  @Prop({ type: Types.ObjectId, ref: 'User'})
+ userId: ObjectId;
   @Prop({ type: String, required: true })
   firstName: string;
 
@@ -21,7 +23,7 @@ export class Veterinaria {
   password: string;
 
   @Prop({ type: Buffer, required: true })
-  certificatePdf: Buffer; // Cambia el tipo según cómo manejes la subida de archivos
+  certificatePdf: Buffer; 
 
   @Prop({ type: String, required: true })
   veterinaryName: string;
