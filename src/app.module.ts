@@ -1,13 +1,12 @@
+// src/app.module.ts
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { User, UserSchema } from './user/models/user.model';
-import { UserController } from './user/models/user.controller';
-import { UserService } from './user/models/user.service';
 import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
+import { Veterinaria } from './veterinaria/models_s/veterinaria.model';
 import { VeterinariaModule } from './veterinaria/veterinaria.module';
+import { TwilioModule } from './twilio/twilio.module';
 
 @Module({
   imports: [
@@ -18,18 +17,16 @@ import { VeterinariaModule } from './veterinaria/veterinaria.module';
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        uri: configService.get<string>(
-          'MONGO_DB_CONNECTION',
-          'mongodb://root:root@localhost:27017/nest?authSource=admin',
-        ),
+        uri: configService.get<string>('MONGO_DB_CONNECTION'),
       }),
       inject: [ConfigService],
     }),
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     UserModule,
+    AuthModule,
     VeterinariaModule,
+    TwilioModule,
   ],
-  controllers: [AppController, UserController],
-  providers: [AppService, UserService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
