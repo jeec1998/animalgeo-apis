@@ -5,7 +5,10 @@ import { TwilioService } from './twilio.service';
 export class TwilioController {
   constructor(private readonly twilioService: TwilioService) {}
   @Get()
-  findAll() {
-    return this.twilioService.sendSms();
+  sendSms() {
+    const from = '+17168995982';
+    const to = '+593 96 8144760';
+    const body = 'Mensaje de texto';
+    return this.twilioService.sendSms(from, to, body);
   }
 }

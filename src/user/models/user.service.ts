@@ -43,6 +43,26 @@ export class UserService {
     return updatedUser;
   }
 
+  async update2FASecret(id: string, secret: string) {
+    const _id = new Types.ObjectId(id);
+    const existingUser = await this.userModel.findOne({ _id: id }).exec();
+    if (!existingUser) {
+      throw new NotFoundException('User with ID ${id} not found');
+    }
+
+    const updatedUser = await this.userModel
+      .findByIdAndUpdate(
+        _id,
+        { twoFactorAuthenticationSecret: secret },
+        {
+          new: true,
+        },
+      )
+      .exec();
+
+    return updatedUser;
+  }
+
   async findAll() {
     const users = await this.userModel.find().exec();
     return users;
@@ -53,6 +73,19 @@ export class UserService {
     if (!user) {
       throw new NotFoundException('User with ID ${id} not found');
     }
+    return user;
+  }
+
+  async findById(id: string) {
+    const user = await this.userModel.findById(id);
+    if (!user) {
+      throw new NotFoundException('User with ID ${id} not found');
+    }
+    return user;
+  }
+
+  async findByEmail(email: string) {
+    const user = await this.userModel.findOne({ email });
     return user;
   }
 
