@@ -1,33 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, IsEmail, IsBoolean, IsNumber, IsLatitude, IsLongitude } from 'class-validator';
+import { IsNotEmpty, IsString, IsEmail, IsBoolean, IsNumber, IsLatitude, IsLongitude, isNotEmpty } from 'class-validator';
 import { Type } from 'class-transformer';
 import { IsOptional, IsNumberString } from 'class-validator';
 
 export class CreateVeterinariaDto {
-  @ApiProperty({ example: 'John' })
+  @ApiProperty({type: 'string'})
   @IsString()
   @IsNotEmpty()
-  readonly firstName: string;
-
-  @ApiProperty({ example: 'Doe' })
-  @IsString()
-  @IsNotEmpty()
-  readonly lastName: string;
-
-  @ApiProperty({ example: 'john@mail.com' })
-  @IsNotEmpty()
-  @IsEmail()
-  email: string;
-
-  @ApiProperty({ example: '1234567890' })
-  @IsString()
-  @IsNotEmpty()
-  readonly phoneNumber: string;
-
-  @ApiProperty({ example: '123456' })
-  @IsString()
-  @IsNotEmpty()
-  password: string;
+  readonly imagVet:string;
 
   @ApiProperty({ type: 'string', format: 'binary', description: 'Certificado en PDF del título' })
   @IsNotEmpty()

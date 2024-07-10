@@ -13,11 +13,9 @@ export class VeterinariaService {
     @InjectModel(Veterinaria.name) private readonly veterinariaModel: Model<VeterinariaDocument>,
   ) {}
 
-  async create(CreateVeterinariaDto: CreateVeterinariaDto) {
+  async create(CreateVeterinariaDto: CreateVeterinariaDto, userId: string) {
     const newVeterinary = CreateVeterinariaDto;
-    newVeterinary.email = newVeterinary.email.toLowerCase();
-    newVeterinary.password = await bcrypt.hash(newVeterinary.password, 10);
-    const createVeterinaria = await this.veterinariaModel.create(newVeterinary);
+    const createVeterinaria = await this.veterinariaModel.create({...newVeterinary, userId: new Types.ObjectId(userId)});
     return createVeterinaria;
   }
   async update(id: string, UpdateVeterinariaDto: UpdateVeterinariaDto) {
@@ -26,15 +24,7 @@ export class VeterinariaService {
     if (!existingUser) {
       throw new NotFoundException('Veterinary with ID ${id} not found');
     }
-
-    if (UpdateVeterinariaDto.email) {
-      UpdateVeterinariaDto.email = UpdateVeterinariaDto.email.toLowerCase();
-    }
-
-    if (UpdateVeterinariaDto.password) {
-      UpdateVeterinariaDto.password = await bcrypt.hash(UpdateVeterinariaDto.password, 10);
-    }
-
+    
     const updateVeterinaria = await this.veterinariaModel
       .findByIdAndUpdate(_id, UpdateVeterinariaDto, {
         new: true,

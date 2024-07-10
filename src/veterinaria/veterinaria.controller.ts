@@ -1,15 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
 import { VeterinariaService } from './models_s/veterinaria.service';
 import { CreateVeterinariaDto } from './dto/create-veterinaria.dto';
 import { UpdateVeterinariaDto } from './dto/update-veterinaria.dto';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('veterinaria')
 export class VeterinariaController {
   constructor(private readonly veterinariaService: VeterinariaService) {}
-
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   @Post()
-  create(@Body() createVeterinariaDto: CreateVeterinariaDto) {
-    return this.veterinariaService.create(createVeterinariaDto);
+  create(@Req() req, @Body() createVeterinariaDto: CreateVeterinariaDto) {
+    console.log(req.user);
+    return this.veterinariaService.create(createVeterinariaDto, req.user._id);
   }
 
   @Get()

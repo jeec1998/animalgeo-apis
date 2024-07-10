@@ -3,25 +3,11 @@ import { IsBoolean, IsEmail, IsNotEmpty, IsString, IsLatitude, IsLongitude } fro
 import { CreateVeterinariaDto } from './create-veterinaria.dto';
 
 export class UpdateVeterinariaDto extends PartialType(CreateVeterinariaDto) {
-  @ApiProperty({ example: 'John', required: false })
-  @IsString()
-  readonly firstName?: string;
 
-  @ApiProperty({ example: 'Doe', required: false })
+  @ApiProperty({type: 'string'})
   @IsString()
-  readonly lastName?: string;
-
-  @ApiProperty({ example: 'john@mail.com', required: false })
-  @IsEmail()
-  email?: string;
-
-  @ApiProperty({ example: '1234567890', required: false })
-  @IsString()
-  readonly phoneNumber?: string;
-
-  @ApiProperty({ example: '123456', required: false })
-  @IsString()
-  password?: string;
+  @IsNotEmpty()
+  readonly imagVet:string;
 
   @ApiProperty({ type: 'string', format: 'binary', description: 'Certificado en PDF del título', required: false })
   readonly certificatePdf?: any; // Cambia el tipo según cómo manejes la subida de archivos
