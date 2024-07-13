@@ -6,9 +6,15 @@ const speakeasy = require('speakeasy');
 export class TwoFactorAuthenticationService {
   generateTwoFactorAuthenticationSecret(email) {
     const secret = speakeasy.generateSecret({
-      name: `ByteScrum Custom App:${email}`,
+      name: `AnimalGeo:${email}`,
     });
-    return secret.base32;
+
+    return secret as {
+      ascii: string;
+      hex: string;
+      base32: string;
+      otpauth_url: string;
+    };
   }
 
   generateTwoFactorAuthenticationToken(secret) {
@@ -17,12 +23,13 @@ export class TwoFactorAuthenticationService {
       encoding: 'base32',
     });
   }
+
   validateTwoFactorAuthenticationToken(token, secret) {
     return speakeasy.totp.verify({
       secret,
       encoding: 'base32',
       token,
-      window: 1,
+      window: 6,
     });
   }
 }

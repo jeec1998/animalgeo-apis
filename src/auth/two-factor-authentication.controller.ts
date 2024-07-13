@@ -8,7 +8,6 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-const speakeasy = require('speakeasy');
 const QRCode = require('qrcode');
 import { TwoFactorAuthenticationService } from './two-factor-authentication.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
@@ -41,15 +40,12 @@ export class TwoFactorAuthenticationController {
         user.email,
       );
 
-    const otpAuthUrl = speakeasy.otpauthURL({
-      secret: secret,
-      label: `AnimalGeo:${user.email}`,
-      issuer: 'AnimalGeo',
-    });
-
     try {
-      const qrCodeDataURL = await QRCode.toDataURL(otpAuthUrl);
-      await this.userService.update2FASecret(user._id.toString(), secret);
+      const qrCodeDataURL = await QRCode.toDataURL(secret.otpauth_url);
+      await this.userService.update2FASecret(
+        user._id.toString(),
+        secret.base32,
+      );
       return res.status(200).json({ qrCode: qrCodeDataURL });
     } catch (error) {
       console.error('Error generating QR code:', error);
@@ -82,6 +78,8 @@ export class TwoFactorAuthenticationController {
     if (!isValidToken) {
       return res.status(401).json({ message: 'Invalid 2FA token' });
     }
+
+    await this.userService.enable2FA(user._id.toString());
 
     return res.status(200).json({ message: '2FA enabled successfully' });
   }

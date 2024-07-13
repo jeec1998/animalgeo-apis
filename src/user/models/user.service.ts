@@ -49,11 +49,29 @@ export class UserService {
     if (!existingUser) {
       throw new NotFoundException('User with ID ${id} not found');
     }
-
     const updatedUser = await this.userModel
       .findByIdAndUpdate(
         _id,
         { twoFactorAuthenticationSecret: secret },
+        {
+          new: true,
+        },
+      )
+      .exec();
+
+    return updatedUser;
+  }
+
+  async enable2FA(id: string) {
+    const _id = new Types.ObjectId(id);
+    const existingUser = await this.userModel.findOne({ _id: id }).exec();
+    if (!existingUser) {
+      throw new NotFoundException('User with ID ${id} not found');
+    }
+    const updatedUser = await this.userModel
+      .findByIdAndUpdate(
+        _id,
+        { isTwoFactorAuthenticationEnabled: true },
         {
           new: true,
         },
