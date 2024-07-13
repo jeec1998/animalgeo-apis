@@ -1,16 +1,16 @@
 import {
-  type CanActivate,
-  type ExecutionContext,
+  CanActivate,
+  ExecutionContext,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { type FastifyRequest } from 'fastify';
+import { FastifyRequest } from 'fastify';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
-import { type FastifyRequestWithUser } from '../shared/types/fastify';
-import { type JwtPayload } from './auth.types';
+import { FastifyRequestWithUser } from '../shared/types/fastify';
+import { JwtPayload } from './auth.types';
 import { UserService } from 'src/user/models/user.service';
 
 @Injectable()
@@ -42,9 +42,7 @@ export class AuthGuard implements CanActivate {
       });
       const user = await this.userService.findByEmail(payload.email);
       if (!user) throw new UnauthorizedException();
-      request.user = {
-        ...user.toObject(),
-      };
+      request.user = user; // Aquí estamos asegurándonos de que el objeto user se agrega correctamente al request
     } catch {
       throw new UnauthorizedException();
     }

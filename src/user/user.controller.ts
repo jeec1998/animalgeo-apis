@@ -6,10 +6,14 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserService } from './models/user.service';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('user')
 export class UserController {
@@ -19,20 +23,19 @@ export class UserController {
   create(@Body() CreateUserDto: CreateUserDto) {
     return this.userService.create(CreateUserDto);
   }
-
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   @Get()
-  findAll() {
-    return this.userService.findAll();
+  async findOne(@Req() req) {
+    const userId = req.user._id; 
+    return this.userService.findOne(userId);
   }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() UpdateUserDto: UpdateUserDto) {
-    return this.userService.update(id, UpdateUserDto);
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @Patch()
+  async update(@Req() req, @Body() UpdateUserDto: UpdateUserDto) {
+    const userId = req.user._id; 
+    return this.userService.update(userId, UpdateUserDto);
   }
 
   @Delete(':id')

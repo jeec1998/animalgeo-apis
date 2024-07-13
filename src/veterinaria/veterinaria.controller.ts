@@ -15,7 +15,8 @@ export class VeterinariaController {
     console.log(req.user);
     return this.veterinariaService.create(createVeterinariaDto, req.user._id);
   }
-
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   @Get()
   findAll() {
     return this.veterinariaService.findAll();
