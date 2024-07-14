@@ -49,7 +49,7 @@ export class VeterinariaService {
     if (!veterinaria) {
       throw new NotFoundException('Veterinary with ID ${id} not found');
     }
-    return Veterinaria;
+    return veterinaria;
   }
 
   async remove(id: string) {
