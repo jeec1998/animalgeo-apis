@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
 import { VeterinariaService } from './veterinaria.service';
 import { CreateVeterinariaDto } from './dto/create-veterinaria.dto';
 import { UpdateVeterinariaDto } from './dto/update-veterinaria.dto';
@@ -12,7 +22,6 @@ export class VeterinariaController {
   @ApiBearerAuth()
   @Post()
   create(@Req() req, @Body() createVeterinariaDto: CreateVeterinariaDto) {
-    console.log(req.user);
     return this.veterinariaService.create(createVeterinariaDto, req.user._id);
   }
   @UseGuards(AuthGuard)
@@ -28,7 +37,10 @@ export class VeterinariaController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateVeterinariaDto: UpdateVeterinariaDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateVeterinariaDto: UpdateVeterinariaDto,
+  ) {
     return this.veterinariaService.update(id, updateVeterinariaDto);
   }
 

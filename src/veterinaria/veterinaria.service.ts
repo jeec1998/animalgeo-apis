@@ -17,6 +17,7 @@ export class VeterinariaService {
     const createVeterinaria = await this.veterinariaModel.create({
       ...newVeterinary,
       userId: new Types.ObjectId(userId),
+      isVerified: false,
     });
     return createVeterinaria;
   }

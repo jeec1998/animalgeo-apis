@@ -1,24 +1,28 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, IsEmail, IsBoolean, IsNumber, IsLatitude, IsLongitude, isNotEmpty } from 'class-validator';
-import { Type } from 'class-transformer';
-import { IsOptional, IsNumberString } from 'class-validator';
+import { IsNotEmpty, IsString, IsLatitude, IsLongitude } from 'class-validator';
 
 export class CreateVeterinariaDto {
-  @ApiProperty({type: 'string'})
+  @ApiProperty({ type: 'string' })
   @IsString()
   @IsNotEmpty()
-  readonly imagVet:string;
+  readonly imagVet: string;
 
-  @ApiProperty({ type: 'string', format: 'binary', description: 'Certificado en PDF del título' })
+  @ApiProperty({
+    type: 'string',
+    description: 'Certificado en PDF del título',
+  })
   @IsNotEmpty()
-  readonly certificatePdf: any; // Cambia el tipo según cómo manejes la subida de archivos
+  readonly certificatePdf: string;
 
   @ApiProperty({ example: 'Veterinaria Los Pinos' })
   @IsString()
   @IsNotEmpty()
   readonly veterinaryName: string;
 
-  @ApiProperty({ example: 'Veterinaria dedicada a la atención de mascotas pequeñas y grandes.' })
+  @ApiProperty({
+    example:
+      'Veterinaria dedicada a la atención de mascotas pequeñas y grandes.',
+  })
   @IsString()
   @IsNotEmpty()
   readonly description: string;

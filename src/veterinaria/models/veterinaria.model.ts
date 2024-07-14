@@ -29,6 +29,9 @@ export class Veterinaria {
 
   @Prop({ type: Buffer, required: true })
   certificatePdf: Buffer;
+
+  @Prop({ type: Boolean, default: false })
+  isVerified: boolean;
 }
 
 export const VeterinariaSchema = SchemaFactory.createForClass(Veterinaria);
