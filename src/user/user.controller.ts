@@ -66,6 +66,21 @@ export class UserController {
 
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
+  @Patch('password')
+  async updatePassword(
+    @Req() req,
+    @Body() body: { password: string; newPassword: string },
+  ) {
+    const userId = req.user._id;
+    return this.userService.updatePassword(
+      userId,
+      body.password,
+      body.newPassword,
+    );
+  }
+
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   @Patch()
   async update(@Req() req, @Body() UpdateUserDto: UpdateUserDto) {
     const userId = req.user._id;

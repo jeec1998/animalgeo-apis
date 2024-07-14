@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
@@ -38,6 +42,30 @@ export class UserService {
       .findByIdAndUpdate(_id, updateUserDto, {
         new: true,
       })
+      .exec();
+
+    return updatedUser;
+  }
+
+  async updatePassword(id: string, password: string, newPassword: string) {
+    const _id = new Types.ObjectId(id);
+    const user = await this.userModel.findOne({ _id: id }).exec();
+    if (!user) {
+      throw new NotFoundException('User with ID ${id} not found');
+    }
+
+    if (!(await bcrypt.compare(password, user.password))) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+    const updatedPassword = await bcrypt.hash(newPassword, 10);
+    const updatedUser = await this.userModel
+      .findByIdAndUpdate(
+        _id,
+        { password: updatedPassword },
+        {
+          new: true,
+        },
+      )
       .exec();
 
     return updatedUser;
