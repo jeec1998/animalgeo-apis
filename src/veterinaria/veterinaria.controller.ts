@@ -65,6 +65,13 @@ export class VeterinariaController {
 
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
+  @Patch('verify/:id')
+  verify(@Param('id') id: string) {
+    return this.veterinariaService.verify(id);
+  }
+
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   @Patch(':id')
   update(
     @Param('id') id: string,

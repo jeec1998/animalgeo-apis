@@ -25,7 +25,7 @@ export class UserService {
   }
   async update(id: string, updateUserDto: UpdateUserDto) {
     const _id = new Types.ObjectId(id);
-    const existingUser = await this.userModel.findOne({ _id: id }).exec();
+    const existingUser = await this.userModel.findOne({ _id }).exec();
     if (!existingUser) {
       throw new NotFoundException('User with ID ${id} not found');
     }
@@ -49,7 +49,7 @@ export class UserService {
 
   async updatePassword(id: string, password: string, newPassword: string) {
     const _id = new Types.ObjectId(id);
-    const user = await this.userModel.findOne({ _id: id }).exec();
+    const user = await this.userModel.findOne({ _id }).exec();
     if (!user) {
       throw new NotFoundException('User with ID ${id} not found');
     }
@@ -73,7 +73,7 @@ export class UserService {
 
   async update2FASecret(id: string, secret: string) {
     const _id = new Types.ObjectId(id);
-    const existingUser = await this.userModel.findOne({ _id: id }).exec();
+    const existingUser = await this.userModel.findOne({ _id }).exec();
     if (!existingUser) {
       throw new NotFoundException('User with ID ${id} not found');
     }
@@ -92,7 +92,7 @@ export class UserService {
 
   async enable2FA(id: string) {
     const _id = new Types.ObjectId(id);
-    const existingUser = await this.userModel.findOne({ _id: id }).exec();
+    const existingUser = await this.userModel.findOne({ _id }).exec();
     if (!existingUser) {
       throw new NotFoundException('User with ID ${id} not found');
     }
@@ -111,7 +111,7 @@ export class UserService {
 
   async disable2FA(id: string) {
     const _id = new Types.ObjectId(id);
-    const existingUser = await this.userModel.findOne({ _id: id }).exec();
+    const existingUser = await this.userModel.findOne({ _id }).exec();
     if (!existingUser) {
       throw new NotFoundException('User with ID ${id} not found');
     }

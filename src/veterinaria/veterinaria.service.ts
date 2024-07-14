@@ -23,9 +23,7 @@ export class VeterinariaService {
   }
   async update(id: string, UpdateVeterinariaDto: UpdateVeterinariaDto) {
     const _id = new Types.ObjectId(id);
-    const existingUser = await this.veterinariaModel
-      .findOne({ _id: id })
-      .exec();
+    const existingUser = await this.veterinariaModel.findOne({ _id }).exec();
     if (!existingUser) {
       throw new NotFoundException('Veterinary with ID ${id} not found');
     }
@@ -68,6 +66,26 @@ export class VeterinariaService {
       throw new NotFoundException('Veterinary with ID ${id} not found');
     }
     return deletedVeterinaria;
+  }
+
+  async verify(id: string) {
+    const _id = new Types.ObjectId(id);
+    const vet = await this.veterinariaModel.findOne({ _id }).exec();
+    if (!vet) {
+      throw new NotFoundException('Veterinaria with ID ${id} not found');
+    }
+
+    const updatedVet = await this.veterinariaModel
+      .findByIdAndUpdate(
+        _id,
+        { isVerified: true },
+        {
+          new: true,
+        },
+      )
+      .exec();
+
+    return updatedVet;
   }
 
   async findNearestVeterinaries(
