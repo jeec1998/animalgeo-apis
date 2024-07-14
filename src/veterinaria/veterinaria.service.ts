@@ -44,6 +44,14 @@ export class VeterinariaService {
     return veterinarias;
   }
 
+  async findUserVets(userId: string) {
+    const oUserId = new Types.ObjectId(userId);
+    const veterinarias = await this.veterinariaModel
+      .find({ userId: oUserId })
+      .exec();
+    return veterinarias;
+  }
+
   async findOne(id: string) {
     const veterinaria = await this.veterinariaModel.findById(id);
     if (!veterinaria) {

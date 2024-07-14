@@ -31,6 +31,13 @@ export class VeterinariaController {
     return this.veterinariaService.findAll();
   }
 
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @Get('user/:userId')
+  findUserVets(@Param('userId') userId: string) {
+    return this.veterinariaService.findUserVets(userId);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.veterinariaService.findOne(id);
