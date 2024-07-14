@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
-import { VeterinariaService } from './models_s/veterinaria.service';
+import { VeterinariaService } from './veterinaria.service';
 import { CreateVeterinariaDto } from './dto/create-veterinaria.dto';
 import { UpdateVeterinariaDto } from './dto/update-veterinaria.dto';
 import { AuthGuard } from 'src/auth/auth.guard';

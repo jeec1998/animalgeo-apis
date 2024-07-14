@@ -6,11 +6,12 @@ export type VeterinariaDocument = HydratedDocument<Veterinaria>;
 
 @Schema({ timestamps: true })
 export class Veterinaria {
-  @Prop({ type: Types.ObjectId, ref: 'User'})
+  @Prop({ type: Types.ObjectId, ref: 'User' })
   userId: ObjectId;
-  @Prop({type: String, required:true})
-  imagVet: string
-  
+
+  @Prop({ type: String, required: true })
+  imagVet: string;
+
   @Prop({ type: String, required: true })
   veterinaryName: string;
 
@@ -27,8 +28,7 @@ export class Veterinaria {
   veterinaryContactNumber: string;
 
   @Prop({ type: Buffer, required: true })
-  certificatePdf: Buffer; 
+  certificatePdf: Buffer;
 }
-
 
 export const VeterinariaSchema = SchemaFactory.createForClass(Veterinaria);
