@@ -1,36 +1,30 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import * as Twilio from 'twilio';
+import { Twilio } from 'twilio';
 
 @Injectable()
 export class TwilioService {
-  private twilioClient: Twilio.Twilio;
-  private serviceSid: string;
+  private readonly twilioClient: Twilio;
+  private accountSid: string;
+  private authToken: string;
+  private twilioNumber: string;
+  private myNumber: string;
 
   constructor(private configService: ConfigService) {
-    const accountSid = this.configService.get<string>('TWILIO_ACCOUNT_SID');
-    const authToken = this.configService.get<string>('TWILIO_AUTH_TOKEN');
-    this.serviceSid = this.configService.get<string>('VERIFY_SERVICE_SID');
-    this.twilioClient = Twilio(accountSid, authToken);
+    this.accountSid = this.configService.get<string>('TWILIO_ACCOUNT_SID');
+    this.authToken = this.configService.get<string>('TWILIO_AUTH_TOKEN');
+    this.twilioNumber = this.configService.get<string>('TWILIO_PHONE_NUMBER');
+    this.myNumber = this.configService.get<string>('MY_NUMBER');
+    this.twilioClient = new Twilio(this.accountSid, this.authToken);
   }
 
-  async sendSms(from: string, to: string, body: string) {
+  async sendSms(body: string, to?: string) {
+    const toNumber = to ?? this.myNumber;
     const message = await this.twilioClient.messages.create({
       body,
-      from,
-      to,
+      from: this.twilioNumber,
+      to: toNumber,
     });
     return message;
-  }
-  async sendVerificationCode(phoneNumber: string) {
-    return this.twilioClient.verify.v2
-      .services(this.serviceSid)
-      .verifications.create({ to: phoneNumber, channel: 'sms' });
-  }
-
-  async verifyCode(phoneNumber: string, code: string) {
-    return this.twilioClient.verify.v2
-      .services(this.serviceSid)
-      .verificationChecks.create({ to: phoneNumber, code });
   }
 }
