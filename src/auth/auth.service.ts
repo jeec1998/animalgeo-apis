@@ -31,10 +31,16 @@ export class AuthService {
   async login(
     email: string,
     password: string,
-  ): Promise<{ accessToken: string }> {
+  ): Promise<{
+    accessToken: string;
+    isTwoFactorAuthenticationEnabled: boolean;
+  }> {
     const user = await this.validateUser(email, password);
     const accessToken = await this.generateJwtToken(user);
-    return { accessToken };
+    return {
+      accessToken,
+      isTwoFactorAuthenticationEnabled: user.isTwoFactorAuthenticationEnabled,
+    };
   }
 
   async validateToken(token: string): Promise<User> {

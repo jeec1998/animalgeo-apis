@@ -23,18 +23,52 @@ export class UserController {
   create(@Body() CreateUserDto: CreateUserDto) {
     return this.userService.create(CreateUserDto);
   }
+
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  @Get()
-  async findOne(@Req() req) {
-    const userId = req.user._id; 
-    return this.userService.findOne(userId);
+  @Get('me')
+  async me(@Req() req) {
+    const userId = req.user._id;
+    const {
+      _id,
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      isTwoFactorAuthenticationEnabled,
+    } = await this.userService.findOne(userId);
+
+    return {
+      _id,
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      isTwoFactorAuthenticationEnabled,
+    };
   }
+
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @Get(':userId')
+  async findOne(@Param('userId') userId: string) {
+    const { _id, firstName, lastName, email, phoneNumber } =
+      await this.userService.findOne(userId);
+
+    return {
+      _id,
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+    };
+  }
+
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   @Patch()
   async update(@Req() req, @Body() UpdateUserDto: UpdateUserDto) {
-    const userId = req.user._id; 
+    const userId = req.user._id;
     return this.userService.update(userId, UpdateUserDto);
   }
 
