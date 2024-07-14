@@ -53,6 +53,7 @@ export class VeterinariaService {
   }
 
   async findOne(id: string) {
+    console.log(id);
     const veterinaria = await this.veterinariaModel.findById(id);
     if (!veterinaria) {
       throw new NotFoundException('Veterinary with ID ${id} not found');
@@ -67,5 +68,50 @@ export class VeterinariaService {
       throw new NotFoundException('Veterinary with ID ${id} not found');
     }
     return deletedVeterinaria;
+  }
+
+  async findNearestVeterinaries(
+    latitude: number,
+    longitude: number,
+  ): Promise<Veterinaria[]> {
+    const allVeterinaries = await this.veterinariaModel.find().exec();
+    const veterinariesWithDistance = allVeterinaries.map((vet) => {
+      const distance = this.calculateDistance(
+        latitude,
+        longitude,
+        vet.latitude,
+        vet.longitude,
+      );
+      return { ...vet.toObject(), distance };
+    });
+
+    veterinariesWithDistance.sort((a, b) => a.distance - b.distance);
+    const nearestVeterinaries = veterinariesWithDistance.slice(0, 5);
+
+    return nearestVeterinaries;
+  }
+
+  private calculateDistance(
+    lat1: number,
+    lon1: number,
+    lat2: number,
+    lon2: number,
+  ): number {
+    const R = 6371;
+    const dLat = this.degreesToRadians(lat2 - lat1);
+    const dLon = this.degreesToRadians(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(this.degreesToRadians(lat1)) *
+        Math.cos(this.degreesToRadians(lat2)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c;
+    return distance;
+  }
+
+  private degreesToRadians(degrees: number): number {
+    return degrees * (Math.PI / 180);
   }
 }

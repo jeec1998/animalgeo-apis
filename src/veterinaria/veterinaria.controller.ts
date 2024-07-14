@@ -8,6 +8,8 @@ import {
   Delete,
   UseGuards,
   Req,
+  Query,
+  ParseFloatPipe,
 } from '@nestjs/common';
 import { VeterinariaService } from './veterinaria.service';
 import { CreateVeterinariaDto } from './dto/create-veterinaria.dto';
@@ -24,6 +26,7 @@ export class VeterinariaController {
   create(@Req() req, @Body() createVeterinariaDto: CreateVeterinariaDto) {
     return this.veterinariaService.create(createVeterinariaDto, req.user._id);
   }
+
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   @Get()
@@ -38,11 +41,30 @@ export class VeterinariaController {
     return this.veterinariaService.findUserVets(userId);
   }
 
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @Get('nearest')
+  async findNearest(
+    @Query('latitude', ParseFloatPipe) latitude: number,
+    @Query('longitude', ParseFloatPipe) longitude: number,
+  ) {
+    const nearestVeterinaries =
+      await this.veterinariaService.findNearestVeterinaries(
+        latitude,
+        longitude,
+      );
+    return nearestVeterinaries;
+  }
+
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.veterinariaService.findOne(id);
   }
 
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -51,6 +73,8 @@ export class VeterinariaController {
     return this.veterinariaService.update(id, updateVeterinariaDto);
   }
 
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.veterinariaService.remove(id);
