@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UserService } from './models/user.service';
+import { UserService } from './user.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { ChangePasswordDto } from './dto/change-password.dto';

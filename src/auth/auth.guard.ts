@@ -11,7 +11,7 @@ import { ConfigService } from '@nestjs/config';
 
 import { FastifyRequestWithUser } from '../shared/types/fastify';
 import { JwtPayload } from './auth.types';
-import { UserService } from 'src/user/models/user.service';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {

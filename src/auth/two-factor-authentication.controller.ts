@@ -10,7 +10,7 @@ import {
 import { TwoFactorAuthenticationService } from './two-factor-authentication.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from './auth.guard';
-import { UserService } from 'src/user/models/user.service';
+import { UserService } from 'src/user/user.service';
 
 @Controller('2fa')
 export class TwoFactorAuthenticationController {

@@ -1,10 +1,10 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { UserService } from 'src/user/models/user.service';
 import { AuthService } from './auth.service';
 import { Public } from 'src/shared/decorators/auth.decorator';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { LoginUser } from 'src/user/dto/login-user.dto';
+import { UserService } from 'src/user/user.service';
 
 @Controller('auth')
 export class AuthController {

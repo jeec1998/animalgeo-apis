@@ -8,7 +8,7 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './auth/jwt.strategy';
 import { AuthService } from './auth/auth.service';
-import { UserService } from './user/models/user.service';
+import { UserService } from './user/user.service';
 import { User, UserSchema } from './user/models/user.model';
 import { TwoFactorAuthenticationModule } from './auth/two-factor-authentication.module';
 import { AuthModule } from './auth/auth.module';

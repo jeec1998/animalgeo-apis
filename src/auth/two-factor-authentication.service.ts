@@ -4,8 +4,8 @@ const speakeasy = require('speakeasy');
 import * as crypto from 'crypto';
 import * as bcrypt from 'bcrypt';
 import { TwilioService } from 'src/twilio/twilio.service';
-import { UserService } from 'src/user/models/user.service';
 import { UserDocument } from 'src/user/models/user.model';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class TwoFactorAuthenticationService {
