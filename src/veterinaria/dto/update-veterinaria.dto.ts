@@ -1,22 +1,37 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { IsBoolean, IsEmail, IsNotEmpty, IsString, IsLatitude, IsLongitude } from 'class-validator';
+import {
+  IsBoolean,
+  IsEmail,
+  IsNotEmpty,
+  IsString,
+  IsLatitude,
+  IsLongitude,
+} from 'class-validator';
 import { CreateVeterinariaDto } from './create-veterinaria.dto';
 
 export class UpdateVeterinariaDto extends PartialType(CreateVeterinariaDto) {
-
-  @ApiProperty({type: 'string'})
+  @ApiProperty({ type: 'string' })
   @IsString()
   @IsNotEmpty()
-  readonly imagVet:string;
+  readonly imagVet: string;
 
-  @ApiProperty({ type: 'string', format: 'binary', description: 'Certificado en PDF del título', required: false })
+  @ApiProperty({
+    type: 'string',
+    format: 'binary',
+    description: 'Certificado en PDF del título',
+    required: false,
+  })
   readonly certificatePdf?: any; // Cambia el tipo según cómo manejes la subida de archivos
 
   @ApiProperty({ example: 'Veterinaria Los Pinos', required: false })
   @IsString()
   readonly veterinaryName?: string;
 
-  @ApiProperty({ example: 'Veterinaria dedicada a la atención de mascotas pequeñas y grandes.', required: false })
+  @ApiProperty({
+    example:
+      'Veterinaria dedicada a la atención de mascotas pequeñas y grandes.',
+    required: false,
+  })
   @IsString()
   readonly description?: string;
 
@@ -32,4 +47,3 @@ export class UpdateVeterinariaDto extends PartialType(CreateVeterinariaDto) {
   @IsString()
   readonly veterinaryContactNumber?: string;
 }
-

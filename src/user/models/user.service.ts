@@ -133,7 +133,10 @@ export class UserService {
 
   async changePassword(id: string, changePasswordDto: ChangePasswordDto) {
     const user = await this.findOne(id);
-    const isMatch = await bcrypt.compare(changePasswordDto.currentPassword, user.password);
+    const isMatch = await bcrypt.compare(
+      changePasswordDto.currentPassword,
+      user.password,
+    );
 
     if (!isMatch) {
       throw new BadRequestException('Current password is incorrect');

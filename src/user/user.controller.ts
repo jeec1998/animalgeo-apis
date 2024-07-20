@@ -72,7 +72,7 @@ export class UserController {
     };
   }
 
- /*  @UseGuards(AuthGuard)
+  /*  @UseGuards(AuthGuard)
   @ApiBearerAuth()
   @Patch('password')
   async updatePassword(
@@ -98,7 +98,10 @@ export class UserController {
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   @Patch('change-password')
-  async changePassword(@Req() req, @Body() changePasswordDto: ChangePasswordDto) {
+  async changePassword(
+    @Req() req,
+    @Body() changePasswordDto: ChangePasswordDto,
+  ) {
     const userId = req.user._id;
     return this.userService.changePassword(userId, changePasswordDto);
   }
@@ -114,12 +117,14 @@ export class UserController {
   @Get()
   async findAll() {
     return this.userService.findAll();
-  
   }
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   @Patch(':id')
-  async update(@Param('id') userId: string, @Body() updateUserDto: UpdateUserDto) {
+  async update(
+    @Param('id') userId: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
     return this.userService.update(userId, updateUserDto);
   }
 }
