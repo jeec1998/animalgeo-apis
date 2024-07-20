@@ -8,12 +8,14 @@ import {
 } from './models/veterinaria.model';
 import { CreateVeterinariaDto } from './dto/create-veterinaria.dto';
 import { UpdateVeterinariaDto } from './dto/update-veterinaria.dto';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class VeterinariaService {
   constructor(
     @InjectModel(Veterinaria.name)
     private readonly veterinariaModel: Model<VeterinariaDocument>,
+    private readonly userService: UserService,
   ) {}
 
   async create(CreateVeterinariaDto: CreateVeterinariaDto, userId: string) {
@@ -88,6 +90,8 @@ export class VeterinariaService {
         },
       )
       .exec();
+
+    await this.userService.makeVetAdmin(vet.userId.toString());
 
     return updatedVet;
   }

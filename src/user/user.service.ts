@@ -148,6 +148,14 @@ export class UserService {
     return user.save();
   }
 
+  async makeVetAdmin(id: string) {
+    const user = await this.findOne(id);
+
+    user.isVetAdmin = true;
+
+    return user.save();
+  }
+
   async findAll() {
     const users = await this.userModel.find().exec();
     return users;

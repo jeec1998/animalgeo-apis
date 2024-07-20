@@ -25,6 +25,9 @@ export class User {
 
   @Prop({ type: String, default: '' })
   twoFactorAuthenticationSecret: string;
+
+  @Prop({ type: Boolean, default: false })
+  isVetAdmin: boolean;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

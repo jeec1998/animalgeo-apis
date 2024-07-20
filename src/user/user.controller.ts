@@ -37,6 +37,7 @@ export class UserController {
       email,
       phoneNumber,
       isTwoFactorAuthenticationEnabled,
+      isVetAdmin,
     } = await this.userService.findOne(userId);
 
     return {
@@ -46,6 +47,7 @@ export class UserController {
       email,
       phoneNumber,
       isTwoFactorAuthenticationEnabled,
+      isVetAdmin,
     };
   }
 
@@ -60,8 +62,15 @@ export class UserController {
   @ApiBearerAuth()
   @Get(':userId')
   async findOne(@Param('userId') userId: string) {
-    const { _id, firstName, lastName, email, phoneNumber } =
-      await this.userService.findOne(userId);
+    const {
+      _id,
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      isTwoFactorAuthenticationEnabled,
+      isVetAdmin,
+    } = await this.userService.findOne(userId);
 
     return {
       _id,
@@ -69,6 +78,8 @@ export class UserController {
       lastName,
       email,
       phoneNumber,
+      isTwoFactorAuthenticationEnabled,
+      isVetAdmin,
     };
   }
 
