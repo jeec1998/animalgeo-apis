@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { ObjectId, Types, type HydratedDocument } from 'mongoose';
+import { ObjectId, Types, HydratedDocument } from 'mongoose';
 import { string } from 'yup';
 
 export type VeterinariaDocument = HydratedDocument<Veterinaria>;
@@ -27,8 +27,8 @@ export class Veterinaria {
   @Prop({ type: String, required: true })
   veterinaryContactNumber: string;
 
-  @Prop({ type: Buffer, required: true })
-  certificatePdf: Buffer;
+  @Prop({ type: string, required: true })
+  certificatePdf: string;
 
   @Prop({ type: Boolean, default: false })
   isVerified: boolean;

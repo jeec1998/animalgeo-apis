@@ -14,6 +14,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UserService } from './models/user.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 @Controller('user')
 export class UserController {
@@ -50,6 +51,13 @@ export class UserController {
 
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
+  @Patch('me')
+  async updateMe(@Req() req, @Body() updateUserDto: UpdateUserDto) {
+    const userId = req.user._id;
+    return this.userService.update(userId, updateUserDto);
+  }
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   @Get(':userId')
   async findOne(@Param('userId') userId: string) {
     const { _id, firstName, lastName, email, phoneNumber } =
@@ -64,7 +72,7 @@ export class UserController {
     };
   }
 
-  @UseGuards(AuthGuard)
+ /*  @UseGuards(AuthGuard)
   @ApiBearerAuth()
   @Patch('password')
   async updatePassword(
@@ -85,10 +93,33 @@ export class UserController {
   async update(@Req() req, @Body() UpdateUserDto: UpdateUserDto) {
     const userId = req.user._id;
     return this.userService.update(userId, UpdateUserDto);
+  } */
+
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @Patch('change-password')
+  async changePassword(@Req() req, @Body() changePasswordDto: ChangePasswordDto) {
+    const userId = req.user._id;
+    return this.userService.changePassword(userId, changePasswordDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.userService.remove(id);
+  }
+
+  // Nuevo endpoint para obtener todos los usuarios
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @Get()
+  async findAll() {
+    return this.userService.findAll();
+  
+  }
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @Patch(':id')
+  async update(@Param('id') userId: string, @Body() updateUserDto: UpdateUserDto) {
+    return this.userService.update(userId, updateUserDto);
   }
 }

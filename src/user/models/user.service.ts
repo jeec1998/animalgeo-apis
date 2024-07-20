@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -8,6 +9,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
+import { ChangePasswordDto } from '../dto/change-password.dto';
 import { User, UserDocument } from './user.model';
 
 @Injectable()
@@ -23,11 +25,12 @@ export class UserService {
     const createdUser = await this.userModel.create(newUser);
     return createdUser;
   }
+
   async update(id: string, updateUserDto: UpdateUserDto) {
     const _id = new Types.ObjectId(id);
     const existingUser = await this.userModel.findOne({ _id }).exec();
     if (!existingUser) {
-      throw new NotFoundException('User with ID ${id} not found');
+      throw new NotFoundException(`User with ID ${id} not found`);
     }
 
     if (updateUserDto.email) {
@@ -75,7 +78,7 @@ export class UserService {
     const _id = new Types.ObjectId(id);
     const existingUser = await this.userModel.findOne({ _id }).exec();
     if (!existingUser) {
-      throw new NotFoundException('User with ID ${id} not found');
+      throw new NotFoundException(`User with ID ${id} not found`);
     }
     const updatedUser = await this.userModel
       .findByIdAndUpdate(
@@ -94,7 +97,7 @@ export class UserService {
     const _id = new Types.ObjectId(id);
     const existingUser = await this.userModel.findOne({ _id }).exec();
     if (!existingUser) {
-      throw new NotFoundException('User with ID ${id} not found');
+      throw new NotFoundException(`User with ID ${id} not found`);
     }
     const updatedUser = await this.userModel
       .findByIdAndUpdate(
@@ -113,7 +116,7 @@ export class UserService {
     const _id = new Types.ObjectId(id);
     const existingUser = await this.userModel.findOne({ _id }).exec();
     if (!existingUser) {
-      throw new NotFoundException('User with ID ${id} not found');
+      throw new NotFoundException(`User with ID ${id} not found`);
     }
     const updatedUser = await this.userModel
       .findByIdAndUpdate(
@@ -128,6 +131,20 @@ export class UserService {
     return updatedUser;
   }
 
+  async changePassword(id: string, changePasswordDto: ChangePasswordDto) {
+    const user = await this.findOne(id);
+    const isMatch = await bcrypt.compare(changePasswordDto.currentPassword, user.password);
+
+    if (!isMatch) {
+      throw new BadRequestException('Current password is incorrect');
+    }
+
+    const hashedPassword = await bcrypt.hash(changePasswordDto.newPassword, 10);
+    user.password = hashedPassword;
+
+    return user.save();
+  }
+
   async findAll() {
     const users = await this.userModel.find().exec();
     return users;
@@ -136,7 +153,7 @@ export class UserService {
   async findOne(id: string) {
     const user = await this.userModel.findById(id);
     if (!user) {
-      throw new NotFoundException('User with ID ${id} not found');
+      throw new NotFoundException(`User with ID ${id} not found`);
     }
     return user;
   }
@@ -144,7 +161,7 @@ export class UserService {
   async findById(id: string) {
     const user = await this.userModel.findById(id);
     if (!user) {
-      throw new NotFoundException('User with ID ${id} not found');
+      throw new NotFoundException(`User with ID ${id} not found`);
     }
     return user;
   }
@@ -157,7 +174,7 @@ export class UserService {
   async remove(id: string) {
     const deletedUser = await this.userModel.findByIdAndDelete(id);
     if (!deletedUser) {
-      throw new NotFoundException('User with ID ${id} not found');
+      throw new NotFoundException(`User with ID ${id} not found`);
     }
     return deletedUser;
   }

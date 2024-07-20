@@ -120,7 +120,7 @@ export class TwoFactorAuthenticationController {
       return res.status(401).json({ message: 'Invalid 2FA token' });
     }
 
-    await this.userService.enable2FA(user._id.toString());
+    await this.userService.disable2FA(user._id.toString());
 
     return res.status(200).json({ message: '2FA disabled successfully' });
   }
