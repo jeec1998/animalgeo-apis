@@ -39,6 +39,7 @@ export class UserController {
       phoneNumber,
       isTwoFactorAuthenticationEnabled,
       isVetAdmin,
+      isSuperAdmin,
     } = await this.userService.findOne(userId);
 
     return {
@@ -49,6 +50,7 @@ export class UserController {
       phoneNumber,
       isTwoFactorAuthenticationEnabled,
       isVetAdmin,
+      isSuperAdmin,
     };
   }
 
@@ -88,6 +90,7 @@ export class UserController {
       phoneNumber,
       isTwoFactorAuthenticationEnabled,
       isVetAdmin,
+      isSuperAdmin,
     } = await this.userService.findOne(userId);
 
     return {
@@ -98,6 +101,7 @@ export class UserController {
       phoneNumber,
       isTwoFactorAuthenticationEnabled,
       isVetAdmin,
+      isSuperAdmin,
     };
   }
 
