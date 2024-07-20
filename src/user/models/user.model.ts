@@ -28,6 +28,9 @@ export class User {
 
   @Prop({ type: Boolean, default: false })
   isVetAdmin: boolean;
+
+  @Prop({ type: Boolean, default: false })
+  isSuperAdmin: boolean;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

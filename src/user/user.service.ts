@@ -156,6 +156,14 @@ export class UserService {
     return user.save();
   }
 
+  async makeSuperAdmin(id: string) {
+    const user = await this.findOne(id);
+
+    user.isSuperAdmin = true;
+
+    return user.save();
+  }
+
   async findAll() {
     const users = await this.userModel.find().exec();
     return users;

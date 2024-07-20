@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   Req,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -58,6 +59,23 @@ export class UserController {
     const userId = req.user._id;
     return this.userService.update(userId, updateUserDto);
   }
+
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @Patch('make-super-admin/:newAdminId')
+  async makeSuperAdmin(@Req() req, @Param('newAdminId') newAdminId: string) {
+    const admin = req.user;
+    if (!admin || !admin.isSuperAdmin) {
+      throw new UnauthorizedException(
+        'Only super admins can make a new super admin',
+      );
+    }
+
+    await this.userService.makeSuperAdmin(newAdminId);
+
+    return { success: true };
+  }
+
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   @Get(':userId')
