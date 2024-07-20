@@ -2,6 +2,11 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ObjectId, Types, HydratedDocument } from 'mongoose';
 import { string } from 'yup';
 
+export interface RateType {
+  userId: string;
+  score: number;
+}
+
 export type VeterinariaDocument = HydratedDocument<Veterinaria>;
 
 @Schema({ timestamps: true })
@@ -32,6 +37,12 @@ export class Veterinaria {
 
   @Prop({ type: Boolean, default: false })
   isVerified: boolean;
+
+  @Prop({ type: Array, default: [] })
+  rate: RateType[];
+
+  @Prop({ type: Number, default: 0 })
+  averageScore: number;
 }
 
 export const VeterinariaSchema = SchemaFactory.createForClass(Veterinaria);

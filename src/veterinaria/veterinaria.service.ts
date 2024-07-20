@@ -1,7 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { Veterinaria, VeterinariaDocument } from './models/veterinaria.model';
+import {
+  RateType,
+  Veterinaria,
+  VeterinariaDocument,
+} from './models/veterinaria.model';
 import { CreateVeterinariaDto } from './dto/create-veterinaria.dto';
 import { UpdateVeterinariaDto } from './dto/update-veterinaria.dto';
 
@@ -84,6 +88,31 @@ export class VeterinariaService {
         },
       )
       .exec();
+
+    return updatedVet;
+  }
+
+  async rate(id: string, newRate: RateType) {
+    const _id = new Types.ObjectId(id);
+    const vet = await this.veterinariaModel.findOne({ _id }).exec();
+    if (!vet) {
+      throw new NotFoundException(`Veterinaria with ID ${id} not found`);
+    }
+
+    const rateIndex = vet.rate.findIndex(
+      (rate) => rate.userId === newRate.userId,
+    );
+
+    if (rateIndex !== -1) {
+      vet.rate[rateIndex].score = newRate.score;
+    } else {
+      vet.rate.push(newRate);
+    }
+
+    const totalScore = vet.rate.reduce((sum, rate) => sum + rate.score, 0);
+    vet.averageScore = totalScore / vet.rate.length;
+
+    const updatedVet = await vet.save();
 
     return updatedVet;
   }
