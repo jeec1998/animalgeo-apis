@@ -19,7 +19,6 @@ import { UpdateVeterinariaDto } from './dto/update-veterinaria.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
 import { extname } from 'path';
 
 @Controller('veterinaria')
@@ -30,13 +29,6 @@ export class VeterinariaController {
   @ApiBearerAuth()
   @Post()
   @UseInterceptors(FilesInterceptor('files', 2, {
-    storage: diskStorage({
-      destination: './uploads',
-      filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, `${uniqueSuffix}${extname(file.originalname)}`);
-      },
-    }),
     fileFilter: (req, file, cb) => {
       if (file.mimetype.match(/\/(jpg|jpeg|png|pdf)$/)) {
         cb(null, true);
@@ -51,19 +43,17 @@ export class VeterinariaController {
     @Req() req,
   ) {
     const userId = req.user._id;
-    const host = req.get('host');
-    const protocol = req.protocol;
+    console.log(files)
+    const imagVetFile = files.find(file => file.originalname==='vetImg');
+    const certificatePdfFile = files.find(file => file.originalname==='certificateImage');
     
-    const imagVetFile = files.find(file => file.mimetype.includes('image'));
-    const certificatePdfFile = files.find(file => file.mimetype.includes('pdf'));
-
-    const imagVet = imagVetFile ? `${protocol}://${host}/uploads/${imagVetFile.filename}` : '';
-    const certificatePdf = certificatePdfFile ? `${protocol}://${host}/uploads/${certificatePdfFile.filename}` : '';
+    const imagVetBase64 = imagVetFile ? imagVetFile.buffer.toString('base64') : '';
+    const certificatePdfBase64 = certificatePdfFile ? certificatePdfFile.buffer.toString('base64') : '';
     
     const createVeterinariaData = {
       ...createVeterinariaDto,
-      imagVet,
-      certificatePdf,
+      imagVet: `data:${imagVetFile.mimetype};base64,${imagVetBase64}`,
+      certificatePdf: `data:${certificatePdfFile.mimetype};base64,${certificatePdfBase64}`,
       userId,
     };
     return this.veterinariaService.create(createVeterinariaData, userId);
