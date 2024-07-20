@@ -111,6 +111,13 @@ export class VeterinariaController {
 
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
+  @Get('top-vets')
+  async getTopVeterinarias() {
+    return await this.veterinariaService.getTopVeterinarias();
+  }
+
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   @Patch('verify/:vetId')
   verify(@Param('vetId') vetId: string) {
     return this.veterinariaService.verify(vetId);

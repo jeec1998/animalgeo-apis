@@ -142,6 +142,14 @@ export class VeterinariaService {
     return nearestVeterinaries;
   }
 
+  async getTopVeterinarias(limit: number = 5) {
+    return this.veterinariaModel
+      .find()
+      .sort({ averageScore: -1 })
+      .limit(limit)
+      .exec();
+  }
+
   private calculateDistance(
     lat1: number,
     lon1: number,
