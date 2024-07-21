@@ -72,7 +72,13 @@ export class VeterinariaController {
     };
     return this.veterinariaService.create(createVeterinariaData, userId);
   }
-
+  
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @Get('top-rated')
+  async getTopRated() {
+    return this.veterinariaService.getTopRated();
+  }
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   @Get()

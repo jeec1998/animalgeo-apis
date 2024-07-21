@@ -120,6 +120,9 @@ export class VeterinariaService {
 
     return updatedVet;
   }
+  async getTopRated(): Promise<Veterinaria[]> {
+    return this.veterinariaModel.find().sort({ averageScore: -1 }).limit(5).exec();
+  }
 
   async findNearestVeterinaries(
     latitude: number,
